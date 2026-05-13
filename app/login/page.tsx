@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -7,188 +8,352 @@ export default function LoginPage() {
   const [senha, setSenha] = useState("");
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState<{ msg: string; erro: boolean } | null>(null);
-  const [erro, setErro] = useState("");
+
+  const [toast, setToast] = useState<{
+    msg: string;
+    erro: boolean;
+  } | null>(null);
+
   const router = useRouter();
 
   const showToast = (msg: string, erro: boolean) => {
     setToast({ msg, erro });
-    setTimeout(() => setToast(null), 2800);
+
+    setTimeout(() => {
+      setToast(null);
+    }, 3000);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setErro(""); // Limpa qualquer erro anterior na tela
+    e.preventDefault();
 
-  try {
-    // Aqui fazemos a chamada POST para a API que criamos no Passo 4
-    const resposta = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, senha }),
-    });
+    setLoading(true);
 
-    // Converte a resposta da API de volta para objeto JavaScript
-    const dados = await resposta.json();
+    try {
+      const resposta = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, senha }),
+      });
 
-    if (resposta.ok) {
-      // Se deu status 200 (OK), o login funcionou! 
-      // Redireciona o usuário para a página de estoque/dashboard
-      router.push("/produtos"); 
-    } else {
-      // Se deu erro (ex: 401), pega a mensagem da API e joga no estado de erro
-      setErro(dados.erro);
+      const dados = await resposta.json();
+
+      if (resposta.ok) {
+        showToast("Login realizado com sucesso!", false);
+
+        setTimeout(() => {
+          router.push("/produtos");
+        }, 1200);
+      } else {
+        showToast(dados.erro || "E-mail ou senha inválidos.", true);
+      }
+    } catch {
+      showToast(
+        "Erro de conexão. Tente novamente mais tarde.",
+        true
+      );
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    // Se o servidor estiver fora do ar ou der pau na internet
-    setErro("Erro de conexão. Tente novamente mais tarde.");
-  }
-};
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 p-8">
-      <div className="relative w-full max-w-sm bg-white/80 border border-blue-200 rounded-xl p-10 overflow-hidden">
+    <>
+      <div className="page-login">
+        <div className="login-card">
 
-        {/* Barra topo */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-blue-500 rounded-t-xl" />
+          <div className="login-topbar" />
 
-        {/* Ícone */}
-        <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-5">
-          <svg className="w-6 h-6 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-            <rect x="2" y="7" width="20" height="14" rx="2" />
-            <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-            <line x1="12" y1="12" x2="12" y2="16" />
-            <circle cx="12" cy="12" r="1" fill="currentColor" />
-          </svg>
-        </div>
+          <div className="login-icon">
+            🔒
+          </div>
 
-        <h1 className="text-lg font-medium text-blue-800 text-center mb-1">
-          Sistema de Gestão de Estoque
-        </h1>
-        <p className="text-sm text-blue-400 text-center mb-8">Faça login para continuar</p>
+          <h1 className="login-title">
+            Sistema de Gestão de Estoque
+          </h1>
 
-        <form onSubmit={handleLogin} className="flex flex-col gap-5">
+          <p className="login-subtitle">
+            Faça login para continuar
+          </p>
 
-            {/* Se a variável 'erro' tiver algum texto, mostra essa div vermelha */}
-{erro && (
-  <div className="flex items-center gap-2 bg-red-50 border border-red-500 text-red-700 p-3 rounded-lg mb-4 text-sm">
-    
-    <svg 
-      className="w-4 h-4 text-red-500 flex-shrink-0" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth={2}
-    >
-      <circle cx="12" cy="12" r="10" />
-      <line x1="12" y1="8" x2="12" y2="12" />
-      <circle cx="12" cy="16" r="1" fill="currentColor" />
-    </svg>
+          <form
+            onSubmit={handleLogin}
+            className="login-form"
+          >
+            <div className="login-field">
+              <label>E-mail</label>
 
-    <span className="font-medium">
-      {erro}
-    </span>
-  </div>
-)}
-
-          {/* E-mail */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-blue-800">E-mail</label>
-            <div className="relative">
-              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <polyline points="22,6 12,13 2,6" />
-              </svg>
               <input
                 type="email"
                 placeholder="seu@email.com"
-                className="w-full pl-10 pr-3 py-2.5 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-900 placeholder-blue-300 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all"
+                className="login-input"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) =>
+                  setEmail(e.target.value)
+                }
               />
             </div>
-          </div>
 
-          {/* Senha */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-blue-800">Senha</label>
-            <div className="relative">
-              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
-              <input
-                type={mostrarSenha ? "text" : "password"}
-                placeholder="Digite sua senha"
-                className="w-full pl-10 pr-10 py-2.5 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-900 placeholder-blue-300 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all"
-                value={senha}
-                onChange={(e) => setSenha(e.target.value)}
-              />
-              <button
-                type="button"
-                onClick={() => setMostrarSenha(!mostrarSenha)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-300 hover:text-blue-500 transition-colors"
-              >
-                {mostrarSenha ? (
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                    <line x1="1" y1="1" x2="23" y2="23" />
-                  </svg>
-                ) : (
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                )}
-              </button>
+            <div className="login-field">
+              <label>Senha</label>
+
+              <div className="senha-wrapper">
+                <input
+                  type={
+                    mostrarSenha
+                      ? "text"
+                      : "password"
+                  }
+                  placeholder="Digite sua senha"
+                  className="login-input"
+                  value={senha}
+                  onChange={(e) =>
+                    setSenha(e.target.value)
+                  }
+                />
+
+                <button
+                  type="button"
+                  className="toggle-btn"
+                  onClick={() =>
+                    setMostrarSenha(!mostrarSenha)
+                  }
+                >
+                  {mostrarSenha ? "🙈" : "👁"}
+                </button>
+              </div>
             </div>
+
+            <a href="#" className="login-link">
+              Esqueceu a senha?
+            </a>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className={`login-submit ${
+                loading ? "disabled" : ""
+              }`}
+            >
+              {loading
+                ? "Entrando..."
+                : "Entrar"}
+            </button>
+          </form>
+
+          <div className="login-badge">
+            🔐 Conexão segura
           </div>
 
-          <a href="#" className="text-xs text-blue-500 hover:text-blue-700 hover:underline text-right -mt-2">
-            Esqueceu a senha?
-          </a>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className={`flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-medium text-white transition-all ${
-              loading
-                ? "bg-blue-300 cursor-not-allowed"
-                : "bg-blue-500 hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-200 active:scale-95"
-            }`}
-          >
-            {loading ? "Entrando..." : "Entrar"}
-            {!loading && (
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                <polyline points="10 17 15 12 10 7" />
-                <line x1="15" y1="12" x2="3" y2="12" />
-              </svg>
-            )}
-          </button>
-        </form>
-
-        {/* Badge de segurança */}
-        <div className="flex items-center gap-2 mt-5 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2">
-          <svg className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-          </svg>
-          <span className="text-xs text-blue-700">Conexão segura — dados criptografados</span>
+          {toast && (
+            <div
+              className={`toast ${
+                toast.erro
+                  ? "toast-error"
+                  : "toast-success"
+              }`}
+            >
+              {toast.msg}
+            </div>
+          )}
         </div>
-
-        {/* Toast */}
-        {toast && (
-          <div className={`absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
-            toast.erro
-              ? "bg-red-50 border border-red-200 text-red-700"
-              : "bg-blue-50 border border-blue-200 text-blue-700"
-          }`}>
-            {toast.msg}
-          </div>
-        )}
       </div>
-    </div>
+
+      <style jsx>{`
+        .page-login {
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 20px;
+          background: linear-gradient(
+            135deg,
+            #0f172a,
+            #1e40af
+          );
+        }
+
+        .login-card {
+          width: 100%;
+          max-width: 420px;
+          background: white;
+          border-radius: 24px;
+          padding: 32px;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+        }
+
+        .login-topbar {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 6px;
+          background: linear-gradient(
+            to right,
+            #2563eb,
+            #60a5fa
+          );
+        }
+
+        .login-icon {
+          width: 75px;
+          height: 75px;
+          background: #eff6ff;
+          border-radius: 20px;
+          margin: 0 auto 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 34px;
+        }
+
+        .login-title {
+          text-align: center;
+          font-size: 28px;
+          font-weight: 700;
+          color: #111827;
+        }
+
+        .login-subtitle {
+          text-align: center;
+          color: #6b7280;
+          margin-top: 8px;
+          margin-bottom: 30px;
+        }
+
+        .login-form {
+          display: flex;
+          flex-direction: column;
+          gap: 18px;
+        }
+
+        .login-field {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .login-field label {
+          font-size: 14px;
+          font-weight: 600;
+          color: #374151;
+        }
+
+        .login-input {
+          width: 100%;
+          height: 52px;
+          border: 1px solid #d1d5db;
+          border-radius: 14px;
+          padding: 0 16px;
+          font-size: 15px;
+          outline: none;
+          transition: 0.2s;
+        }
+
+        .login-input:focus {
+          border-color: #2563eb;
+          box-shadow: 0 0 0 4px rgba(37,99,235,0.15);
+        }
+
+        .senha-wrapper {
+          position: relative;
+        }
+
+        .toggle-btn {
+          position: absolute;
+          right: 14px;
+          top: 50%;
+          transform: translateY(-50%);
+          border: none;
+          background: transparent;
+          cursor: pointer;
+          font-size: 18px;
+        }
+
+        .login-link {
+          text-align: right;
+          color: #2563eb;
+          font-size: 14px;
+          text-decoration: none;
+        }
+
+        .login-link:hover {
+          text-decoration: underline;
+        }
+
+        .login-submit {
+          height: 52px;
+          border: none;
+          border-radius: 14px;
+          background: linear-gradient(
+            to right,
+            #2563eb,
+            #3b82f6
+          );
+          color: white;
+          font-size: 15px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: 0.25s;
+        }
+
+        .login-submit:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 20px rgba(37,99,235,0.3);
+        }
+
+        .disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+
+        .login-badge {
+          margin-top: 22px;
+          background: #eff6ff;
+          color: #1d4ed8;
+          border: 1px solid #bfdbfe;
+          padding: 12px;
+          border-radius: 12px;
+          text-align: center;
+          font-size: 13px;
+        }
+
+        .toast {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          padding: 14px 18px;
+          border-radius: 12px;
+          color: white;
+          font-weight: 600;
+          z-index: 999;
+          animation: fadeIn 0.3s ease;
+        }
+
+        .toast-error {
+          background: #dc2626;
+        }
+
+        .toast-success {
+          background: #16a34a;
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+    </>
   );
 }

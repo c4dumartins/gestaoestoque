@@ -65,19 +65,6 @@ export default function NovaMovimentacaoPage() {
           </form>
         </div>
       </main>
-      <style>{`
-        .pagina-form { min-height: 100vh; background: #f0f6ff; padding-bottom: 40px; }
-        .conteudo-principal { max-width: 500px; margin: 40px auto; }
-        .container-form { background: white; padding: 30px; border-radius: 8px; border: 1px solid #d0e4f4; }
-        .titulo-form { font-size: 20px; margin-bottom: 20px; color: #1a3a5c; }
-        .formulario { display: flex; flex-direction: column; gap: 15px; }
-        .grupo-campo { display: flex; flex-direction: column; gap: 5px; }
-        label { font-size: 13px; font-weight: bold; color: #2a5a8a; }
-        select, input { padding: 10px; border: 1px solid #c2d8ef; border-radius: 6px; }
-        .grupo-botoes { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-        .btn-salvar { background: #2e7d32; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
-        .btn-cancelar { background: #999; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
-      `}</style>
     </div>
   );
 }

@@ -11,18 +11,11 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-[#2b2b2b] text-white p-4 flex justify-between items-center">
-      <div className="font-bold text-lg">
-        Gestão de Estoque
-      </div>
-      <div className="flex items-center gap-4">
-        <span className="text-sm">Olá, <strong>Administrador</strong></span>
-        <button 
-          onClick={handleLogout}
-          className="bg-[#cc0000] hover:bg-red-700 text-white px-4 py-1 rounded text-sm transition-colors"
-        >
-          Sair
-        </button>
+    <header className="site-header">
+      <div className="header-title">Gestão de Estoque</div>
+      <div className="header-identity">
+        <span>Olá, <strong>Administrador</strong></span>
+        <button onClick={handleLogout} className="btn-logout">Sair</button>
       </div>
     </header>
   );

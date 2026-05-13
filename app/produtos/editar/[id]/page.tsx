@@ -125,25 +125,6 @@ export default function EditarProdutoPage() {
           </form>
         </div>
       </main>
-
-      {/* O CSS é exatamente o mesmo da tela "Novo Produto" */}
-      <style>{`
-        .pagina-form { min-height: 100vh; background: #f0f6ff; }
-        .conteudo-principal { max-width: 600px; margin: 40px auto; padding: 0 24px; }
-        .container-form { background: #fff; border: 1px solid #d0e4f4; border-radius: 8px; padding: 32px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .titulo-form { font-size: 22px; font-weight: 600; color: #1a3a5c; margin: 0 0 24px; border-bottom: 1px solid #edf4fc; padding-bottom: 16px; }
-        .formulario { display: flex; flex-direction: column; gap: 20px; }
-        .grupo-campo { display: flex; flex-direction: column; gap: 8px; flex: 1; }
-        .linha-campos { display: flex; gap: 16px; }
-        label { font-size: 13px; font-weight: 600; color: #2a5a8a; }
-        input, textarea { border: 1px solid #c2d8ef; background: #fff; padding: 10px 14px; font-size: 14px; color: #1a3a5c; border-radius: 6px; outline: none; transition: border-color 0.15s; width: 100%; }
-        input:focus, textarea:focus { border-color: #4a90c4; }
-        .grupo-botoes { display: flex; justify-content: flex-end; gap: 12px; margin-top: 12px; padding-top: 24px; border-top: 1px solid #edf4fc; }
-        .btn-cancelar { background: #fff; color: #6b8cae; border: 1px solid #c2d8ef; padding: 10px 20px; font-size: 14px; font-weight: 500; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
-        .btn-cancelar:hover { background: #f5f9ff; color: #4a7aa8; }
-        .btn-salvar { background: #2a6db5; color: #fff; border: none; padding: 10px 20px; font-size: 14px; font-weight: 500; border-radius: 6px; cursor: pointer; transition: background 0.15s; }
-        .btn-salvar:hover { background: #1f5a9a; }
-      `}</style>
     </div>
   );
 }

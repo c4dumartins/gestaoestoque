@@ -96,24 +96,6 @@ export default function EstoquePage() {
           </table>
         </div>
       </main>
-
-      <style>{`
-        .pagina-dashboard { min-height: 100vh; background: #f0f6ff; }
-        .conteudo-principal { max-width: 1000px; margin: 0 auto; padding: 30px; }
-        .alerta-estoque { background: #fff9c4; border: 1px solid #fbc02d; padding: 15px; border-radius: 8px; margin-bottom: 25px; color: #856404; font-size: 14px; }
-        .barra-topo { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .titulo-tabela { font-size: 16px; font-weight: 700; color: #1a3a5c; }
-        .botoes { display: flex; gap: 10px; }
-        .btn-preto { background: #333; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 13px; }
-        .btn-cinza { background: #999; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 13px; }
-        .tabela-estilizada { width: 100%; border-collapse: collapse; background: white; border: 1px solid #d0e4f4; font-size: 13px; }
-        .tabela-estilizada th { background: #333; color: white; padding: 12px; text-align: left; }
-        .tabela-estilizada td { padding: 12px; border-bottom: 1px solid #edf4fc; }
-        .status-normal { color: #2e7d32; font-weight: bold; }
-        .status-baixo { color: #c62828; font-weight: bold; background: #ffebee; padding: 2px 6px; border-radius: 4px; }
-        .tipo-entrada { color: #2e7d32; font-weight: bold; }
-        .tipo-saida { color: #c62828; font-weight: bold; }
-      `}</style>
     </div>
   );
 }
