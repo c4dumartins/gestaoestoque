@@ -36,7 +36,7 @@ export default function LoginPage() {
     if (resposta.ok) {
       // Se deu status 200 (OK), o login funcionou! 
       // Redireciona o usuário para a página de estoque/dashboard
-      router.push("/estoque"); 
+      router.push("/produtos"); 
     } else {
       // Se deu erro (ex: 401), pega a mensagem da API e joga no estado de erro
       setErro(dados.erro);

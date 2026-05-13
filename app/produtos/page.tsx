@@ -32,7 +32,6 @@ export default function ProdutosPage() {
                 const res = await fetch(`/api/produtos/${id}`, { method: "DELETE" });
 
                 if (!res.ok) {
-                    // Se a API retornou erro (404, 500, etc), a gente captura aqui
                     const erroData = await res.json();
                     alert(`Falha ao excluir: ${erroData.erro}`);
                     return;
@@ -77,13 +76,20 @@ export default function ProdutosPage() {
                         onChange={(e) => setBusca(e.target.value)}
                     />
                     <div className="grupo-botoes">
+                        {/* BOTÃO MOVIMENTAÇÕES ADICIONADO AQUI */}
+                        <button 
+                            className="btn-secundario"
+                            onClick={() => router.push("/estoque")}
+                        >
+                            Movimentações
+                        </button>
+                        
                         <button
                             className="btn-primario"
                             onClick={() => router.push("/produtos/novo")}
                         >
                             + Novo Produto
                         </button>
-                        <button className="btn-secundario">Voltar</button>
                     </div>
                 </div>
 
@@ -102,7 +108,6 @@ export default function ProdutosPage() {
                         </thead>
                         <tbody>
                             {produtosFiltrados.map((produto: any) => {
-                                // Aqui usamos as colunas reais do banco: quantidade e estoque_minimo
                                 const alerta = estoqueAbaixoMin(
                                     produto.quantidade,
                                     produto.estoque_minimo
@@ -201,10 +206,6 @@ export default function ProdutosPage() {
           transition: border-color 0.15s;
         }
 
-        .campo-busca::placeholder {
-          color: #9bb5cc;
-        }
-
         .campo-busca:focus {
           border-color: #4a90c4;
         }
@@ -223,6 +224,7 @@ export default function ProdutosPage() {
           border-radius: 6px;
           cursor: pointer;
           transition: background 0.15s;
+          font-weight: 500;
         }
 
         .btn-primario:hover {
@@ -230,19 +232,19 @@ export default function ProdutosPage() {
         }
 
         .btn-secundario {
-          background: #fff;
-          color: #4a7aa8;
-          border: 1px solid #c2d8ef;
+          background: #333;
+          color: #fff;
+          border: none;
           padding: 8px 16px;
           font-size: 13px;
           border-radius: 6px;
           cursor: pointer;
           transition: all 0.15s;
+          font-weight: 500;
         }
 
         .btn-secundario:hover {
-          background: #eaf3ff;
-          border-color: #4a90c4;
+          background: #444;
         }
 
         .container-tabela {
@@ -268,7 +270,6 @@ export default function ProdutosPage() {
           font-weight: 600;
           font-size: 12px;
           color: #2a5a8a;
-          letter-spacing: 0.3px;
           text-transform: uppercase;
           border-bottom: 1px solid #c2d8ef;
         }
@@ -279,50 +280,18 @@ export default function ProdutosPage() {
           border-bottom: 1px solid #edf4fc;
         }
 
-        .tabela-produtos tbody tr:last-child td {
-          border-bottom: none;
-        }
-
-        .tabela-produtos tbody tr:hover {
-          background: #f5f9ff;
-        }
-
         .linha-alerta {
           background: #fff8f0;
         }
 
-        .linha-alerta:hover {
-          background: #fff3e6 !important;
-        }
+        .col-id { width: 52px; }
+        .col-preco { width: 110px; font-variant-numeric: tabular-nums; }
+        .col-num { width: 110px; text-align: center; }
+        .col-acoes { width: 130px; text-align: center; }
 
-        .col-id {
-          width: 52px;
-        }
-
-        .col-preco {
-          width: 110px;
-          font-variant-numeric: tabular-nums;
-        }
-
-        .col-num {
-          width: 110px;
-          text-align: center;
-        }
-
-        .col-acoes {
-          width: 130px;
-          text-align: center;
-        }
-
-        .texto-muted {
-          color: #6b8cae;
-        }
-
-        .nome-produto {
-          font-weight: 500;
-          color: #1a3a5c;
-        }
-
+        .texto-muted { color: #6b8cae; }
+        .nome-produto { font-weight: 500; color: #1a3a5c; }
+        
         .estoque-baixo {
           color: #c0541a;
           font-weight: 600;
@@ -334,11 +303,8 @@ export default function ProdutosPage() {
           background: #fde8d4;
           color: #b84c10;
           font-size: 10px;
-          font-weight: 600;
           padding: 2px 6px;
           border-radius: 4px;
-          text-transform: uppercase;
-          letter-spacing: 0.4px;
         }
 
         .grupo-acoes {
@@ -355,12 +321,6 @@ export default function ProdutosPage() {
           font-size: 12px;
           border-radius: 5px;
           cursor: pointer;
-          transition: all 0.15s;
-        }
-
-        .btn-editar:hover {
-          background: #cce4f8;
-          border-color: #4a90c4;
         }
 
         .btn-excluir {
@@ -371,12 +331,6 @@ export default function ProdutosPage() {
           font-size: 12px;
           border-radius: 5px;
           cursor: pointer;
-          transition: all 0.15s;
-        }
-
-        .btn-excluir:hover {
-          background: #f9d0cc;
-          border-color: #e08078;
         }
 
         .rodape-tabela {
